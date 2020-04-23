@@ -8,9 +8,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class InfoRepository(private var service: InfoService) {
+class CommentsRepository(private var service: InfoService) {
 
-    fun getInfo(): LiveData<List<CommentsModel>> {
+    fun getComments(): LiveData<List<CommentsModel>> {
         val data = MutableLiveData<List<CommentsModel>>()
 
         service.getInfo().enqueue(object : Callback<List<CommentsModel>> {
@@ -19,7 +19,6 @@ class InfoRepository(private var service: InfoService) {
             }
 
             override fun onFailure(call: Call<List<CommentsModel>>, t: Throwable) {
-
             }
         })
         return data

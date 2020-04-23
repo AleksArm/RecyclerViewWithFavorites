@@ -9,7 +9,7 @@ import com.highestaim.recyclerviewwithfavorites.adapter.HomePageAdapter
 import com.highestaim.recyclerviewwithfavorites.conervter.Converter
 import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
 import com.highestaim.recyclerviewwithfavorites.viewModel.FavoriteViewModel
-import com.highestaim.recyclerviewwithfavorites.viewModel.InfoViewModel
+import com.highestaim.recyclerviewwithfavorites.viewModel.CommentsViewModel
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -20,7 +20,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 class HomeFragment : BaseFragment() {
 
     private val adapter = HomePageAdapter()
-    private val homeListViewModel: InfoViewModel? by viewModel()
+    private val homeListViewModel: CommentsViewModel? by viewModel()
     private val favoriteViewModel: FavoriteViewModel by viewModel()
 
     override fun getLayoutId() = R.layout.main_fragment
@@ -37,7 +37,7 @@ class HomeFragment : BaseFragment() {
 
 
     private fun setList() {
-        homeListViewModel?.getInfo()?.observe(viewLifecycleOwner, Observer {
+        homeListViewModel?.getComments()?.observe(viewLifecycleOwner, Observer {
             it?.let { models ->
                 setFavorites(models)
             }

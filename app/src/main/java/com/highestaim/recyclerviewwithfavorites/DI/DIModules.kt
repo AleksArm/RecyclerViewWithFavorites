@@ -2,17 +2,17 @@ package com.highestaim.recyclerviewwithfavorites.DI
 
 import com.highestaim.recyclerviewwithfavorites.db.AppDatabase
 import com.highestaim.recyclerviewwithfavorites.repository.FavoriteRepository
-import com.highestaim.recyclerviewwithfavorites.repository.InfoRepository
+import com.highestaim.recyclerviewwithfavorites.repository.CommentsRepository
 import com.highestaim.recyclerviewwithfavorites.service.InfoService
 import com.highestaim.recyclerviewwithfavorites.viewModel.FavoriteViewModel
-import com.highestaim.recyclerviewwithfavorites.viewModel.InfoViewModel
+import com.highestaim.recyclerviewwithfavorites.viewModel.CommentsViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val appRepositories: Module = module {
     single { FavoriteRepository(get()) }
-    single { InfoRepository(get()) }
+    single { CommentsRepository(get()) }
 }
 
 val Services: Module = module {
@@ -22,5 +22,5 @@ val Services: Module = module {
 
 val appViewModels: Module = module {
     viewModel { FavoriteViewModel(get()) }
-    viewModel { InfoViewModel(get()) }
+    viewModel { CommentsViewModel(get()) }
 }
