@@ -7,13 +7,17 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.highestaim.recyclerviewwithfavorites.R
-import com.highestaim.recyclerviewwithfavorites.model.Model
+import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
+import kotlin.properties.Delegates
 
 class FavoriteAdapter :
-    RecyclerView.Adapter<FavoriteAdapter.MyViewHolder>() {
+    RecyclerView.Adapter<FavoriteAdapter.MyViewHolder>(),AutoUpdatableAdapter {
 
-    private val items = arrayListOf<Model>()
-    var onClick: ((Model) -> Unit)? = null
+    var onClick: ((CommentsModel) -> Unit)? = null
+
+    var favorites: List<CommentsModel?> by Delegates.observable(emptyList()) { _, old, new ->
+        autoNotify(old, new) { o, n -> o?.id == n?.id }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -21,28 +25,19 @@ class FavoriteAdapter :
         return MyViewHolder(view)
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = favorites.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val item = items[position]
+        val item = favorites[position]
 
-        holder.name.text = "name = ${item.name}"
-        holder.email.text = "email = ${item.email}"
+        holder.name.text = "name = ${item?.name}"
+        holder.email.text = "email = ${item?.email}"
 
         holder.favorite.setOnClickListener {
-            onClick?.invoke(item)
+            item?.let { it1 -> onClick?.invoke(it1) }
         }
     }
-
-    fun updateData(items: List<Model>?) {
-        this.items.clear()
-        items?.let {
-            this.items.addAll(it)
-            notifyDataSetChanged()
-        }
-    }
-
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name: AppCompatTextView = itemView.findViewById(R.id.name)

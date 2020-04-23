@@ -5,9 +5,9 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.highestaim.recyclerviewwithfavorites.R
-import com.highestaim.recyclerviewwithfavorites.adapter.MainPageAdapter
+import com.highestaim.recyclerviewwithfavorites.adapter.HomePageAdapter
 import com.highestaim.recyclerviewwithfavorites.conervter.Converter
-import com.highestaim.recyclerviewwithfavorites.model.Model
+import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
 import com.highestaim.recyclerviewwithfavorites.viewModel.FavoriteViewModel
 import com.highestaim.recyclerviewwithfavorites.viewModel.InfoViewModel
 import kotlinx.android.synthetic.main.main_fragment.*
@@ -19,7 +19,7 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment : BaseFragment() {
 
-    private val adapter = MainPageAdapter()
+    private val adapter = HomePageAdapter()
     private val homeListViewModel: InfoViewModel? by viewModel()
     private val favoriteViewModel: FavoriteViewModel by viewModel()
 
@@ -64,16 +64,16 @@ class HomeFragment : BaseFragment() {
     }
 
     //compare two lists from back amd local for set favorite
-    private fun setFavorites(models: List<Model>) {
+    private fun setFavorites(comments: List<CommentsModel>) {
         favoriteViewModel.getFavorites()?.observe(viewLifecycleOwner, Observer {
             it.forEach { favorite ->
-                models.forEach { model ->
+                comments.forEach { model ->
                     if (favorite.modelId == model.id) {
                         model.isFavorite = true
                     }
                 }
             }
-            adapter.updateData(models)
+            adapter.comments = comments
         })
     }
 

@@ -3,7 +3,7 @@ package com.highestaim.recyclerviewwithfavorites.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-data class Model(
+data class CommentsModel(
 
     @SerializedName("postId")
     @Expose
