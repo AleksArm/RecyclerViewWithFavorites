@@ -47,7 +47,7 @@ class FavoriteFragment : BaseFragment() {
     private fun updateList() {
         favoriteViewModel?.getFavorites()?.observe(viewLifecycleOwner, Observer {
             it.let { favoriteEntity ->
-                adapter.favorites = favEntitiesToModels(favoriteEntity).reversed()
+                adapter.submitList(favEntitiesToModels(favoriteEntity).reversed())
             }
         })
     }

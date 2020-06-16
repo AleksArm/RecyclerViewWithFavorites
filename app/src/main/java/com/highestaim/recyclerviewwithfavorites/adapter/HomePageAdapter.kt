@@ -5,31 +5,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.highestaim.recyclerviewwithfavorites.R
 import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
 import kotlin.properties.Delegates
 
 
-class HomePageAdapter : RecyclerView.Adapter<HomePageAdapter.MyViewHolder>(),
-    AutoUpdatableAdapter {
+class HomePageAdapter : ListAdapter<CommentsModel,HomePageAdapter.MyViewHolder>(
+    CommentsDiffCallBacks()
+) {
 
     var onClick: ((CommentsModel) -> Unit)? = null
-    var comments: List<CommentsModel?> by Delegates.observable(emptyList()) { _, old, new ->
-        autoNotify(old, new) { o, n -> o?.id == n?.id }
-    }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.home_list_adapter_view, parent, false)
-        return MyViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = MyViewHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.home_list_adapter_view, parent, false))
 
-    override fun getItemCount() = comments.size
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val item = comments[position]
+        val item = getItem(position)
         val context = holder.itemView.context
 
         holder.name.text = "name = ${item?.name}"
@@ -58,4 +54,15 @@ class HomePageAdapter : RecyclerView.Adapter<HomePageAdapter.MyViewHolder>(),
     }
 
 
+}
+
+private class CommentsDiffCallBacks : DiffUtil.ItemCallback<CommentsModel>() {
+
+    override fun areItemsTheSame(oldItem: CommentsModel, newItem: CommentsModel): Boolean {
+        return newItem == oldItem
+    }
+
+    override fun areContentsTheSame(oldItem: CommentsModel, newItem: CommentsModel): Boolean {
+        return newItem == oldItem
+    }
 }

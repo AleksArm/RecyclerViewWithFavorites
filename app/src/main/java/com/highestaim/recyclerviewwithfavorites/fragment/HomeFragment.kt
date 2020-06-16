@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.highestaim.recyclerviewwithfavorites.R
 import com.highestaim.recyclerviewwithfavorites.adapter.HomePageAdapter
 import com.highestaim.recyclerviewwithfavorites.conervter.Converter
 import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
-import com.highestaim.recyclerviewwithfavorites.viewModel.FavoriteViewModel
 import com.highestaim.recyclerviewwithfavorites.viewModel.CommentsViewModel
+import com.highestaim.recyclerviewwithfavorites.viewModel.FavoriteViewModel
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -48,6 +49,8 @@ class HomeFragment : BaseFragment() {
         homeListRecyclerView.setHasFixedSize(true)
         val layoutManager = LinearLayoutManager(activity)
         homeListRecyclerView.layoutManager = layoutManager
+        adapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         homeListRecyclerView.adapter = adapter
     }
 
@@ -73,7 +76,7 @@ class HomeFragment : BaseFragment() {
                     }
                 }
             }
-            adapter.comments = comments
+            adapter.submitList(comments)
         })
     }
 
