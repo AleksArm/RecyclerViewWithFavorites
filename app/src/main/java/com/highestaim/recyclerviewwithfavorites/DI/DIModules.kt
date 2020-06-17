@@ -12,7 +12,7 @@ import org.koin.dsl.module
 
 val appRepositories: Module = module {
     single { FavoriteRepository(get()) }
-    single { CommentsRepository(get()) }
+    single { CommentsRepository(get(),get()) }
 }
 
 val Services: Module = module {

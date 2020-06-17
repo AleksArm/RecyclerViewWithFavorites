@@ -4,14 +4,18 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.highestaim.recyclerviewwithfavorites.dao.CommonDao
 import com.highestaim.recyclerviewwithfavorites.dao.FavoriteDao
+import com.highestaim.recyclerviewwithfavorites.entity.CommonEntity
 import com.highestaim.recyclerviewwithfavorites.entity.FavoriteEntity
 
 
-@Database(entities = [FavoriteEntity::class], version = 2, exportSchema = false)
+@Database(entities = [FavoriteEntity::class,CommonEntity::class], version = 3, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteDao(): FavoriteDao
+
+    abstract fun commonDao(): CommonDao
 
     companion object {
 

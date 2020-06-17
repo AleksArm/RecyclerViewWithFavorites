@@ -8,12 +8,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.highestaim.recyclerviewwithfavorites.R
 import com.highestaim.recyclerviewwithfavorites.adapter.HomePageAdapter
 import com.highestaim.recyclerviewwithfavorites.conervter.Converter
+import com.highestaim.recyclerviewwithfavorites.conervter.Converter.commentsToCommonEntities
+import com.highestaim.recyclerviewwithfavorites.conervter.Converter.commonEntitiesToComments
 import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
 import com.highestaim.recyclerviewwithfavorites.viewModel.CommentsViewModel
 import com.highestaim.recyclerviewwithfavorites.viewModel.FavoriteViewModel
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -38,6 +41,18 @@ class HomeFragment : BaseFragment() {
 
 
     private fun setList() {
+        CoroutineScope(Main).launch {
+            homeListViewModel?.getMainDataFromLocal()?.observe(viewLifecycleOwner, Observer {
+                if (it.isNullOrEmpty()) {
+                    getDataFromRemote()
+                } else {
+                    setFavorites(commonEntitiesToComments(it))
+                }
+            })
+        }
+    }
+
+    private fun getDataFromRemote() {
         homeListViewModel?.getComments()?.observe(viewLifecycleOwner, Observer {
             it?.let { models ->
                 setFavorites(models)
@@ -70,12 +85,13 @@ class HomeFragment : BaseFragment() {
     private fun setFavorites(comments: List<CommentsModel>) {
         favoriteViewModel.getFavorites()?.observe(viewLifecycleOwner, Observer {
             it.forEach { favorite ->
-                comments.forEach { model ->
-                    if (favorite.modelId == model.id) {
-                        model.isFavorite = true
+                comments.forEach { comment ->
+                    if (favorite.modelId == comment.id) {
+                        comment.isFavorite = true
                     }
                 }
             }
+            homeListViewModel?.insertMainDataToDb(commentsToCommonEntities(comments))
             adapter.submitList(comments)
         })
     }

@@ -6,9 +6,9 @@ import com.highestaim.recyclerviewwithfavorites.entity.FavoriteEntity
 
 class FavoriteRepository(appDatabase: AppDatabase)  {
 
-    private var favoriteDao = appDatabase.favoriteDao()
+    private val favoriteDao = appDatabase.favoriteDao()
 
-    val allFavorites: LiveData<List<FavoriteEntity>> = favoriteDao.getInfo()
+    val allFavorites: LiveData<List<FavoriteEntity>> = favoriteDao.getFavorites()
 
     fun insert(favorite: FavoriteEntity) {
         favoriteDao.insert(favorite)

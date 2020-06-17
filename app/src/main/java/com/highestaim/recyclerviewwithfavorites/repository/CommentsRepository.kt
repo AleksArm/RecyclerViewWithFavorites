@@ -2,13 +2,19 @@ package com.highestaim.recyclerviewwithfavorites.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.highestaim.recyclerviewwithfavorites.db.AppDatabase
+import com.highestaim.recyclerviewwithfavorites.entity.CommonEntity
 import com.highestaim.recyclerviewwithfavorites.model.CommentsModel
 import com.highestaim.recyclerviewwithfavorites.service.InfoService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CommentsRepository(private var service: InfoService) {
+class CommentsRepository(private var service: InfoService,private var db : AppDatabase) {
 
     fun getComments(): LiveData<List<CommentsModel>> {
         val data = MutableLiveData<List<CommentsModel>>()
@@ -22,5 +28,22 @@ class CommentsRepository(private var service: InfoService) {
             }
         })
         return data
+    }
+
+
+    suspend fun getCommentsFromLocal() : LiveData<List<CommonEntity>>{
+        val data = MutableLiveData<List<CommonEntity>>()
+
+        withContext(CoroutineScope(IO).coroutineContext) {
+            data.postValue(db.commonDao().getMainInfo())
+        }
+
+        return data
+    }
+
+    fun insertMainDataToDb(data : List<CommonEntity>) {
+        CoroutineScope(IO).launch {
+            db.commonDao().insertAll(data)
+        }
     }
 }

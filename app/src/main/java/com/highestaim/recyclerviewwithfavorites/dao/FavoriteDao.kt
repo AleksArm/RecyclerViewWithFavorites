@@ -7,8 +7,8 @@ import com.highestaim.recyclerviewwithfavorites.entity.FavoriteEntity
 
 @Dao
 interface FavoriteDao {
-    @Query("SELECT * from info_table ")
-    fun getInfo(): LiveData<List<FavoriteEntity>>
+    @Query("SELECT * from favorite_entity ")
+    fun getFavorites(): LiveData<List<FavoriteEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(favoriteEntity: FavoriteEntity)
